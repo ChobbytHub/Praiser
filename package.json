@@ -8,7 +8,7 @@
     "lint": "eslint index.js $(find src -name '*.ts' -a -not -name '.d.ts' -o -name '*.tsx')",
     "start": "react-native start",
     "test": "jest",
-    "typ-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit",
     "coverage": "jest --coverage"
   },
   "dependencies": {
