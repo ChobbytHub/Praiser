@@ -1,3 +1,6 @@
 {
-  "Editor.formatOnSave": true
+  "Editor.formatOnSave": true,
+  "cSpell.words": [
+    "cimg"
+  ]
 }
