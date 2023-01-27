@@ -2,14 +2,31 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+executor:
+  node-lts:
+    docker:
+      - image: cimg/node:18.13
+    working_directory: ~/repo
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
+  build:
+    executor: node-lts
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json"}}
+          - v1-dependencies-
+      - run: yarn
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json"}}
+
   test:
-    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
-    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
-    docker:
-      - image: cimg/node:15.1
+    executor: node-lts
     # Add steps to the job
     # See: https://circleci.com/docs/2.0/configuration-reference/#steps
     steps:
@@ -18,21 +35,23 @@ jobs:
           # See the configuration reference documentation for more details on using restore_cache and save_cache steps
           # https://circleci.com/docs/2.0/configuration-reference/?section=reference#save_cache
           keys:
-            - node-deps-v1-{{ .Branch }}-{{checksum "package-lock.json"}}
+            - v1-dependencies-{{ checksum "package.json"}}
+            - v1-dependencies-
       - run:
-          name: install packages
-          command: npm ci
-      - save_cache:
-          key: node-deps-v1-{{ .Branch }}-{{checksum "package-lock.json"}}
-          paths:
-            - ~/.npm
-      - run:
-          name: Run Tests
-          command: npm run test
+          command: |
+            yarn type-check
+            yarn lint
+            yarn coverage
+      - store_artifacts:
+          path: ~/repo/coverage
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  orb-free-workflow:
+  version: 2
+  test:
     jobs:
-      - test
+      - build
+      - test:
+          requires:
+            - build
