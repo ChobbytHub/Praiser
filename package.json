@@ -5,9 +5,11 @@
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "lint": "eslint .",
+    "lint": "eslint index.js $(find src -name '*.ts' -a -not -name '.d.ts' -o -name '*.tsx')",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "typ-check": "tsc --noEmit",
+    "coverage": "jest --coverage"
   },
   "dependencies": {
     "react": "18.2.0",
