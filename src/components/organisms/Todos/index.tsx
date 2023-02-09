@@ -29,6 +29,8 @@ interface ReadonlyProps {
 
 type Props = EditableProps | ReadonlyProps;
 
+const ItemSeparatorComponent = () => <View style={styles.separator} />;
+
 export default function Todos(props: Props) {
   if (props.isEditable) {
     return (
@@ -36,7 +38,7 @@ export default function Todos(props: Props) {
         style={styles.container}
         data={props.todos}
         renderItem={({ item }) => <Todo.Component isEditable={props.isEditable} state={item} actions={props.actions} />}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
+        ItemSeparatorComponent={ItemSeparatorComponent}
         keyExtractor={item => item.id}
       />
     );
@@ -46,7 +48,7 @@ export default function Todos(props: Props) {
       style={styles.container}
       data={props.todos}
       renderItem={({ item }) => <Todo.Component isEditable={props.isEditable} state={item} actions={props.actions} />}
-      ItemSeparatorComponent={() => <View style={styles.separator} />}
+      ItemSeparatorComponent={ItemSeparatorComponent}
       keyExtractor={item => item.id}
       ListHeaderComponent={props.header}
     />

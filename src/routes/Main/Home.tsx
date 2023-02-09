@@ -9,6 +9,7 @@ const Stack = createStackNavigator();
 const cardStyle = {
   backgroundColor: COLOR.MAIN,
 };
+const headerLeft = () => <HeaderLeft />;
 
 function HomeNavigator() {
   return (
@@ -18,7 +19,7 @@ function HomeNavigator() {
         component={Home}
         options={{
           title: 'Home',
-          headerLeft: () => <HeaderLeft />,
+          headerLeft: headerLeft,
         }}
       />
       <Stack.Screen name={DETAIL} component={Detail} options={{ title: 'Detail' }} />
